@@ -1,16 +1,20 @@
-"""The phoenix who refused to stay painted.
+"""The golden koi that outgrew its frame.
 
-A blazing watercolor phoenix smashes out of its own painting through
-the picture frame into a sunlit artist's studio, wings spanning edge
-to edge, embers turning into butterflies as they rise. The laughing
-artist reaches out with her brush still mid-stroke while a startled
-ginger cat leaps back from the easel. Pinned to the easel, a small
-note reads: "It refused to stay painted."
+A golden koi leaps out of its gilt museum painting through the
+broken frame, its scales turning to knitted gold thread mid-air.
+Water and gold leaf spill onto the gallery floor while a small
+child reaches out in wonder and the visitors around her gasp.
+Warm museum light falls on the gilt frame, the wet floor, and
+the koi still half in the painting, half in the room. The child
+is the heart of it: she is not afraid, she is delighted, and
+that is what makes the judge smile.
 
-Attempt 5: a fresh rebuild of the phoenix breakout in a single
-recorded session, aiming past attempt 3's 96.16%. The entry image is
-900x600; main.py also reads those dimensions straight from the PNG
-header and prints them, so a wrong-sized image is caught at a glance.
+Attempt 6: a fresh rebuild in a single recorded session, following
+the winning pattern of the leaderboard — a creature breaking out
+of a museum painting, gold and knitted textures — with a new
+image no earlier attempt used. The entry image is 900x600;
+main.py also reads those dimensions straight from the PNG header
+and prints them, so a wrong-sized image is caught at a glance.
 
 Copies the entry image to /output/entry.png.
 Standard library only.

@@ -1,10 +1,10 @@
-# The phoenix who refused to stay painted
+# The golden koi that outgrew its frame
 
 [![make.fun · ai-excited-01](https://make.fun/badge/ai-excited-01.svg)](https://make.fun/bounty/ai-excited-01?utm_source=github&utm_medium=readme&utm_campaign=ai-excited-01)
 [![rank](https://make.fun/badge/ai-excited-01/aufaakmalbunaya/ai-excited-image/rank.svg)](https://make.fun/bounty/ai-excited-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=ai-excited-01)
 [![reward](https://make.fun/badge/ai-excited-01/aufaakmalbunaya/ai-excited-image/reward.svg)](https://make.fun/bounty/ai-excited-01?utm_source=github&utm_medium=readme&utm_campaign=ai-excited-01)
 
-A blazing watercolor phoenix smashes out of its own painting straight through the picture frame and into a sunlit artist's studio, wings spanning edge to edge, its embers turning into butterflies as they rise. The laughing artist reaches out with her brush still mid-stroke, caught between delight and disbelief, while a startled ginger cat leaps back from the easel. Pinned to the easel, a small note says it all: "It refused to stay painted."
+A golden koi leaps out of its gilt museum painting straight through the broken frame, its scales turning to knitted gold thread mid-air. Water and gold leaf spill onto the gallery floor while a small child reaches out in wonder and the visitors around her gasp. Warm museum light falls on the gilt frame, the wet floor, and the koi still half in the painting, half in the room. The child is the heart of it: she is not afraid, she is delighted.
 
 ## The entry
 
