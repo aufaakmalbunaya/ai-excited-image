@@ -1,67 +1,76 @@
-"""The golden koi that outgrew its frame.
-
-A golden koi leaps out of its gilt museum painting through the
-broken frame, its scales turning to knitted gold thread mid-air.
-Water and gold leaf spill onto the gallery floor while a small
-child reaches out in wonder and the visitors around her gasp.
-Warm museum light falls on the gilt frame, the wet floor, and
-the koi still half in the painting, half in the room. The child
-is the heart of it: she is not afraid, she is delighted, and
-that is what makes the judge smile.
-
-Attempt 6: a fresh rebuild in a single recorded session, following
-the winning pattern of the leaderboard — a creature breaking out
-of a museum painting, gold and knitted textures — with a new
-image no earlier attempt used. The entry image is 900x600;
-main.py also reads those dimensions straight from the PNG header
-and prints them, so a wrong-sized image is caught at a glance.
-
-Copies the entry image to /output/entry.png.
-Standard library only.
-"""
+#!/usr/bin/env python3
+"""Check the entry image and place a verified copy in the output folder."""
 
 import hashlib
+import os
 import shutil
 import struct
 import sys
-from pathlib import Path
-
-PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 
 
-def png_dimensions(data):
-    """Read width and height from the PNG IHDR chunk."""
-    if len(data) < 24 or data[12:16] != b"IHDR":
-        raise ValueError("missing IHDR chunk")
-    width, height = struct.unpack(">II", data[16:24])
+SOURCE_NAME = "entry.png"
+TARGET_DIR = "/output"
+TARGET_NAME = "entry.png"
+WANTED_WIDTH = 900
+WANTED_HEIGHT = 600
+PNG_MARK = b"\x89PNG\r\n\x1a\n"
+
+
+def stop(reason):
+    print(f"error: {reason}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+def sha256_of(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        while True:
+            block = handle.read(65536)
+            if not block:
+                break
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def png_size(path):
+    with open(path, "rb") as handle:
+        head = handle.read(33)
+    if len(head) < 33:
+        stop("entry image is too short to hold a PNG header")
+    if head[:8] != PNG_MARK:
+        stop("entry image does not start with the PNG signature")
+    if head[12:16] != b"IHDR":
+        stop("first PNG chunk is not IHDR")
+    width, height = struct.unpack(">II", head[16:24])
     return width, height
 
 
 def main():
-    source = Path(__file__).resolve().parent / "entry.png"
-    source_bytes = source.read_bytes()
-    if not source_bytes.startswith(PNG_MAGIC):
-        print("error: entry.png is not a valid PNG", file=sys.stderr)
-        raise SystemExit(1)
-    width, height = png_dimensions(source_bytes)
-    print(f"dimensions: {width}x{height}")
-    if (width, height) != (900, 600):
-        print("error: entry.png must be 900x600", file=sys.stderr)
-        raise SystemExit(1)
-    output_dir = Path("/output")
-    output_dir.mkdir(parents=True, exist_ok=True)
-    destination = output_dir / "entry.png"
-    shutil.copyfile(source, destination)
-    # Determinism self-check: the output must be byte-identical to the source.
-    source_hash = hashlib.sha256(source_bytes).hexdigest()
-    output_hash = hashlib.sha256(destination.read_bytes()).hexdigest()
-    print(f"source: {source}")
-    print(f"output: {destination}")
-    print(f"sha256: {output_hash}")
-    print(f"match: {source_hash == output_hash}")
-    if source_hash != output_hash:
-        print("error: determinism self-check failed", file=sys.stderr)
-        raise SystemExit(1)
+    here = os.path.dirname(os.path.abspath(__file__))
+    source = os.path.join(here, SOURCE_NAME)
+    if not os.path.isfile(source):
+        stop(f"missing source image: {source}")
+
+    width, height = png_size(source)
+    print(f"entry image: {width}x{height}")
+    if width != WANTED_WIDTH or height != WANTED_HEIGHT:
+        stop(f"expected {WANTED_WIDTH}x{WANTED_HEIGHT}, got {width}x{height}")
+
+    os.makedirs(TARGET_DIR, exist_ok=True)
+    target = os.path.join(TARGET_DIR, TARGET_NAME)
+    shutil.copyfile(source, target)
+
+    before = sha256_of(source)
+    after = sha256_of(target)
+    print(f"source sha256: {before}")
+    print(f"output sha256: {after}")
+    if before != after:
+        stop("output copy hash differs from source hash")
+    if os.path.getsize(source) != os.path.getsize(target):
+        stop("output copy size differs from source size")
+    print(f"copy size verified: {os.path.getsize(target)} bytes")
+    print("self-check passed: output copy matches source exactly")
+    print(f"copied to {target}")
 
 
 if __name__ == "__main__":
