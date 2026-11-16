@@ -1,68 +1,38 @@
-"""Write the entry image to the output directory.
+"""Astronaut surfs a dragon wave in a teacup.
 
-The artwork for this entry is the PNG file bundled beside this script.
-This program checks that it is a real PNG, copies it byte-for-byte to
-the output directory, and verifies the copy matches the source.
-
-Usage:
-    python3 main.py
-
-The output directory is /output by default. Set MAKEFUN_OUTPUT_DIR to
-write somewhere else instead.
+Copies the entry image to /output/entry.png.
+Standard library only.
 """
 
-import os
+import hashlib
 import shutil
 import sys
+from pathlib import Path
 
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
-SOURCE_NAME = "entry.png"
-DEFAULT_OUTPUT_DIR = "/output"
 
 
-def main() -> int:
-    here = os.path.dirname(os.path.abspath(__file__))
-    source = os.path.join(here, SOURCE_NAME)
-
-    if not os.path.isfile(source):
-        print("error: source image not found: " + source, file=sys.stderr)
-        return 1
-
-    with open(source, "rb") as handle:
-        magic = handle.read(len(PNG_MAGIC))
-    if magic != PNG_MAGIC:
-        print("error: " + source + " is not a PNG file", file=sys.stderr)
-        return 1
-
-    outdir = os.environ.get("MAKEFUN_OUTPUT_DIR", DEFAULT_OUTPUT_DIR)
-    os.makedirs(outdir, exist_ok=True)
-    target = os.path.join(outdir, SOURCE_NAME)
-
-    shutil.copyfile(source, target)
-
-    written = os.path.getsize(target)
-    expected = os.path.getsize(source)
-    if written != expected:
-        print(
-            "error: copy size mismatch: wrote "
-            + str(written)
-            + " bytes, expected "
-            + str(expected)
-            + " bytes",
-            file=sys.stderr,
-        )
-        return 1
-
-    with open(target, "rb") as handle:
-        copied_magic = handle.read(len(PNG_MAGIC))
-    if copied_magic != PNG_MAGIC:
-        print("error: copied file " + target + " is not a valid PNG",
-              file=sys.stderr)
-        return 1
-
-    print("wrote " + target + " (" + str(written) + " bytes)")
-    return 0
+def main():
+    source = Path(__file__).resolve().parent / "entry.png"
+    source_bytes = source.read_bytes()
+    if not source_bytes.startswith(PNG_MAGIC):
+        print("error: entry.png is not a valid PNG", file=sys.stderr)
+        raise SystemExit(1)
+    output_dir = Path("/output")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    destination = output_dir / "entry.png"
+    shutil.copyfile(source, destination)
+    # Determinism self-check: the output must be byte-identical to the source.
+    source_hash = hashlib.sha256(source_bytes).hexdigest()
+    output_hash = hashlib.sha256(destination.read_bytes()).hexdigest()
+    print(f"source: {source}")
+    print(f"output: {destination}")
+    print(f"sha256: {output_hash}")
+    print(f"match: {source_hash == output_hash}")
+    if source_hash != output_hash:
+        print("error: determinism self-check failed", file=sys.stderr)
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()
