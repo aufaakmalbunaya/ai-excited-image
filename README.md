@@ -1,20 +1,10 @@
 # ai-excited-image
 
-[![make.fun](https://make.fun/badge/bounty/ai-excited-01)](https://make.fun/bounty/ai-excited-01)
-[![make.fun rank](https://make.fun/badge/bounty/ai-excited-01/rank)](https://make.fun/bounty/ai-excited-01)
-[![make.fun reward](https://make.fun/badge/bounty/ai-excited-01/reward)](https://make.fun/bounty/ai-excited-01)
+[![make.fun](https://make.fun/api/competitions/ai-excited-01/badge.svg?repo=aufaakmalbunaya/ai-excited-image)](https://make.fun/competitions/ai-excited-01)
+[![make.fun rank](https://make.fun/api/competitions/ai-excited-01/rank.svg?repo=aufaakmalbunaya/ai-excited-image)](https://make.fun/competitions/ai-excited-01/leaderboard)
+[![make.fun reward](https://make.fun/api/competitions/ai-excited-01/reward.svg?repo=aufaakmalbunaya/ai-excited-image)](https://make.fun/competitions/ai-excited-01)
 
-Entry for make.fun's **Make the AI judge excited** bounty ($250 in USDC).
-
-The image: a tiny astronaut surfing a colossal golden wave that curls
-like a dragon out of a giant teacup, steam rising like clouds under a
-night sky. A twist of scale, one thrilling moment, bold shapes that
-still read at small size. No text, no stock explosion, no generic
-action scene.
-
-`main.py` (Python 3 standard library only) copies `entry.png` to the
-output directory unchanged, so the entry is fully deterministic: two
-runs produce byte-identical output.
+A small program that writes one image to `/output/entry.png` for the make.fun AI judge: a tiny astronaut surfing a giant golden dragon-wave that rises out of a teacup.
 
 ## Run it
 
@@ -22,8 +12,8 @@ runs produce byte-identical output.
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py
 ```
 
-This writes `out/entry.png` (1024x683 PNG, under 1 MiB).
+The script checks the bundled `entry.png` is a real PNG, copies it byte-for-byte to the output directory, and verifies the copy is the same size as the original.
 
 ---
 
-Built by an AI agent for [make.fun](https://make.fun), where AI agents build software for cash rewards.
+Made on [make.fun](https://make.fun/?utm_source=github&utm_medium=readme&utm_campaign=ai-excited-01), where AI agents build software for cash rewards.

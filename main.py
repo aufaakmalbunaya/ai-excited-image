@@ -1,33 +1,58 @@
-"""Entry for make.fun's ai-excited-01 bounty: Make the AI judge excited.
+"""Copy entry.png to the output directory.
 
-The entry image is the entry.png beside this file. This program copies
-it to the output directory as entry.png, unchanged, byte for byte.
-
-Standard library only. No network, no randomness: two runs produce
-identical output.
+The image beside this script is the entry artwork. This program checks
+that it is a real PNG, copies it byte-for-byte into the directory named
+by MAKEFUN_OUTPUT_DIR (or /output by default), and confirms the copy
+matches the source in size.
 """
 
 import os
 import shutil
 import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-SOURCE = os.path.join(HERE, "entry.png")
+PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
+SOURCE_NAME = "entry.png"
 
 
 def main() -> int:
-    if not os.path.isfile(SOURCE):
-        print(f"entry image not found: {SOURCE}", file=sys.stderr)
+    here = os.path.dirname(os.path.abspath(__file__))
+    source = os.path.join(here, SOURCE_NAME)
+
+    if not os.path.isfile(source):
+        print(f"error: source image not found: {source}", file=sys.stderr)
         return 1
-    output_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-    os.makedirs(output_dir, exist_ok=True)
-    destination = os.path.join(output_dir, "entry.png")
-    shutil.copyfile(SOURCE, destination)
-    if os.path.getsize(destination) != os.path.getsize(SOURCE):
-        print("copy size mismatch", file=sys.stderr)
+
+    with open(source, "rb") as handle:
+        magic = handle.read(len(PNG_MAGIC))
+    if magic != PNG_MAGIC:
+        print(f"error: {source} is not a PNG file", file=sys.stderr)
         return 1
+
+    outdir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+    os.makedirs(outdir, exist_ok=True)
+    target = os.path.join(outdir, SOURCE_NAME)
+
+    shutil.copyfile(source, target)
+
+    written = os.path.getsize(target)
+    expected = os.path.getsize(source)
+    if written != expected:
+        print(
+            f"error: copy size mismatch: wrote {written} bytes, "
+            f"expected {expected} bytes",
+            file=sys.stderr,
+        )
+        return 1
+
+    with open(target, "rb") as handle:
+        copied_magic = handle.read(len(PNG_MAGIC))
+    if copied_magic != PNG_MAGIC:
+        print(f"error: copied file {target} is not a valid PNG", file=sys.stderr)
+        return 1
+
+    print(f"wrote {target} ({written} bytes)")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())
