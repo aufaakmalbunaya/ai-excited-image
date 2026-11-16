@@ -1,4 +1,9 @@
-"""Astronaut surfs a dragon wave in a teacup.
+"""Watercolor phoenix breaks out of the canvas.
+
+A phoenix bursts off a painted canvas in a sunlit artist's studio,
+embers turning into butterflies, while the artist laughs and a ginger
+cat leaps back in surprise. Attempt 4: a breakout moment, following
+the pattern of a creature leaving its artwork for the real world.
 
 Copies the entry image to /output/entry.png.
 Standard library only.
